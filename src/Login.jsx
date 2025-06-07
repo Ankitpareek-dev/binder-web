@@ -1,12 +1,28 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import axios from "axios";
 
 export default function LoginCard() {
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = async () => {};
+  const handleLogin = async () => {
+    try {
+      await axios.post(
+        "http://localhost:3000/login",
+        {
+          emailId: emailId,
+          password: password,
+        },
+        {
+          withCredentials: true, // Include credentials for CORS
+        }
+      );
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
 
   return (
     <div className="flex justify-center my-10">
@@ -57,7 +73,9 @@ export default function LoginCard() {
 
           {/* Login Button */}
           <div className="card-actions justify-end mt-6">
-            <button className="btn btn-primary w-full">Login</button>
+            <button className="btn btn-primary w-full" onClick={handleLogin}>
+              Login
+            </button>
           </div>
         </div>
       </div>
