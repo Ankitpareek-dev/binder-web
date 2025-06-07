@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginCard() {
-  const [email, setEmail] = useState("");
+  const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleLogin = async () => {};
 
   return (
     <div className="flex justify-center my-10">
@@ -17,13 +19,13 @@ export default function LoginCard() {
           {/* Email Input */}
           <div className="form-control mt-4">
             <label className="label">
-              <span className="label-text">Email</span>
+              <span className="label-text">email</span>
             </label>
             <input
               type="email"
               placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={emailId}
+              onChange={(e) => setEmailId(e.target.value)}
               className="input input-bordered w-full pr-12"
             />
           </div>
