@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 function NavBar() {
   const user = useSelector((store) => store.user);
   if (!user) return null;
-  console.log(user.photoId);
+  // console.log(user.photoId);
   return (
     <div className="navbar bg-base-300 shadow-sm">
       <div className="flex-1">
