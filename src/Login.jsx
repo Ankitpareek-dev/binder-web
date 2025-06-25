@@ -1,15 +1,20 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addUser } from "./utils/userSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginCard() {
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      await axios.post(
+      const res = await axios.post(
         "http://localhost:3000/login",
         {
           emailId: emailId,
@@ -19,6 +24,10 @@ export default function LoginCard() {
           withCredentials: true, // Include credentials for CORS
         }
       );
+      const { user } = res.data;
+      dispatch(addUser(user));
+      navigate("/");
+      // console.log(res);
     } catch (error) {
       console.error("Login failed:", error);
     }
