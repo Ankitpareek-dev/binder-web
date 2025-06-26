@@ -3,6 +3,7 @@ import UserCard from "./userCard";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 function EditProfile({ user }) {
   const [firstName, setFirstName] = useState(user.firstName);
@@ -10,10 +11,12 @@ function EditProfile({ user }) {
   const [age, setAge] = useState(user.age);
   const [gender, setGender] = useState(user.gender);
   const [bio, setBio] = useState(user.bio);
-
+  const [isToast, setIsToast] = useState(false);
+  const dispatch = useDispatch();
+  if (!user) return;
   const editBio = async () => {
     try {
-      const res = axios.patch(
+      const res = await axios.patch(
         BASE_URL + "/profile/edit",
         {
           firstName: firstName,
@@ -26,6 +29,11 @@ function EditProfile({ user }) {
           withCredentials: true,
         }
       );
+      dispatch(addUser(res.data));
+      setIsToast(true);
+      setInterval(() => {
+        setIsToast(false);
+      }, 2000);
     } catch (err) {
       console.error(err.message);
     }
@@ -115,6 +123,13 @@ function EditProfile({ user }) {
         </div>
       </div>
       <UserCard user={{ firstName, lastName, age, gender, bio }} />
+      {isToast && (
+        <div className="toast toast-top toast-center">
+          <div className="alert alert-success">
+            <span>Profile Updated Successfully</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

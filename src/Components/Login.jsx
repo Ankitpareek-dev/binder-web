@@ -28,7 +28,7 @@ export default function LoginCard() {
       );
       const { user } = res.data;
       dispatch(addUser(user));
-      navigate("/");
+      navigate("/feed");
       // console.log(res);
     } catch (error) {
       setError(error?.response?.data);
