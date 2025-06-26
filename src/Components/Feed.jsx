@@ -24,8 +24,10 @@ function Feed() {
   }, []);
   return (
     feed && (
-      <div className="flex justify-center my-auto">
-        <UserCard user={feed[0]} />
+      <div className="flex flex-wrap justify-center gap-7 ">
+        {feed.map((user, index) => (
+          <UserCard key={index} user={user} />
+        ))}
       </div>
     )
   );

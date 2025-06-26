@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import axios from "axios";
 import { removeUser } from "../utils/userSlice";
+import { removeFeed } from "../utils/feedSlice";
 
 function NavBar() {
   const user = useSelector((store) => store.user);
@@ -16,6 +17,8 @@ function NavBar() {
         { withCredentials: true }
       );
       dispatch(removeUser());
+      dispatch(removeFeed());
+
       navigate("/login");
     } catch (err) {
       console.error(err);
@@ -51,7 +54,11 @@ function NavBar() {
             <li>
               <Link to="/profile" className="justify-between">
                 Profile
-                <span className="badge">New</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/connections" className="justify-between">
+                Connections
               </Link>
             </li>
             <li>
