@@ -19,7 +19,7 @@ function Body() {
       });
 
       dispatch(addUser(user.data));
-      console.log(user.data);
+      // console.log(user.data);
     } catch (err) {
       navigate("/login");
       console.error(err);

@@ -10,6 +10,7 @@ export default function LoginCard() {
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -30,6 +31,7 @@ export default function LoginCard() {
       navigate("/");
       // console.log(res);
     } catch (error) {
+      setError(error?.response?.data);
       console.error("Login failed:", error);
     }
   };
@@ -81,6 +83,7 @@ export default function LoginCard() {
             </div>
           </div>
 
+          <p className="text-red-400">{error}</p>
           {/* Login Button */}
           <div className="card-actions justify-end mt-6">
             <button className="btn btn-primary w-full" onClick={handleLogin}>
