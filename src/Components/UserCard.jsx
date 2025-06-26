@@ -1,6 +1,6 @@
 function UserCard({ user }) {
   if (!user) return;
-  const { firstName, lastName, about, age, gender } = user;
+  const { firstName, lastName, bio, age, gender } = user;
   //   console.log(user);
   return (
     <div>
@@ -17,7 +17,7 @@ function UserCard({ user }) {
           </h2>
           <a>{age}</a>
           <a>{gender}</a>
-          <p>{about}</p>
+          <p>{bio}</p>
           <div className="card-actions justify-center my-4">
             <button className="btn btn-secondary">Interested</button>
             <button className="btn btn-primary">Ignore</button>
