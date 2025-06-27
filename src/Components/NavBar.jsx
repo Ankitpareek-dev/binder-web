@@ -3,14 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import axios from "axios";
 import { removeUser } from "../utils/userSlice";
-import { removeFeed } from "../utils/feedSlice";
+import { emptyFeed } from "../utils/feedSlice";
+import { emptyRequests } from "../utils/requestSlice";
 import { useEffect, useState } from "react";
-import { addRequests } from "../utils/requestSlice";
+import { addRequests, removeRequests } from "../utils/requestSlice";
 
 function NavBar() {
   const [noOfRequests, setNoOfRequests] = useState(0);
   const user = useSelector((store) => store.user);
-  const requests = useSelector((store) => store.requests?.data);
+  const requests = useSelector((store) => store.requests);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -22,7 +23,8 @@ function NavBar() {
         { withCredentials: true }
       );
       dispatch(removeUser());
-      dispatch(removeFeed());
+      dispatch(emptyFeed());
+      dispatch(emptyRequests());
 
       navigate("/login");
     } catch (err) {
@@ -34,9 +36,9 @@ function NavBar() {
       const res = await axios.get(BASE_URL + "/user/requests/received", {
         withCredentials: true,
       });
-      const number = (res.data?.data).length;
+      const number = res.data?.data.length;
       setNoOfRequests(number);
-      dispatch(addRequests(res.data));
+      dispatch(addRequests(res.data?.data));
       console.log(res.data);
     } catch (err) {
       console.log(err);
@@ -45,6 +47,17 @@ function NavBar() {
   useEffect(() => {
     fetchRequests();
   }, []);
+  const handleRequest = async (status, id) => {
+    // console.log(id);
+    const res = await axios.post(
+      BASE_URL + `/request/review/${status}/${id}`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+    dispatch(removeRequests(id));
+  };
 
   if (!user) return null;
   // console.log(user.photoId);
@@ -110,24 +123,34 @@ function NavBar() {
             {/* Request 1 */}
 
             {requests &&
-              requests.map((request) => (
-                <li className="mb-2">
+              requests.map((request, index) => (
+                <li key={index} className="mb-2">
                   <div className="flex gap-2 items-center">
                     <img
-                      src={request.photoUrl}
+                      src={request.fromUser.photoUrl}
                       className="w-10 h-10 rounded-full"
                       alt="User"
                     />
                     <div className="flex flex-col">
                       <p className="font-medium">
-                        {request.firstName} {request.lastName}
+                        {request.fromUser.firstName} {request.fromUser.lastName}
                       </p>
                       <p className="text-xs text-zinc-500">Wants to connect</p>
                       <div className="flex gap-2 mt-1">
-                        <button className="btn btn-xs btn-success">
+                        <button
+                          onClick={() => {
+                            handleRequest("accepted", request.requestId);
+                          }}
+                          className="btn btn-xs btn-success"
+                        >
                           Accept
                         </button>
-                        <button className="btn btn-xs btn-outline btn-error">
+                        <button
+                          onClick={() => {
+                            handleRequest("rejected", request.requestId);
+                          }}
+                          className="btn btn-xs btn-outline btn-error"
+                        >
                           Ignore
                         </button>
                       </div>
